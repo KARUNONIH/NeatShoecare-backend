@@ -3,6 +3,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { User, UserSchema } from './user.schema';
+import {
+  BlacklistedToken,
+  BlacklistedTokenSchema,
+} from './blacklisted-token.schema';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { GoogleStrategy } from './google.strategy';
@@ -10,7 +14,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema },
+      { name: BlacklistedToken.name, schema: BlacklistedTokenSchema },
+    ]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({

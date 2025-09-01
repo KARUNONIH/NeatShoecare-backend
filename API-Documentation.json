@@ -1,41 +1,147 @@
 {
   "_type": "export",
   "__export_format": 4,
-  "__export_date": "2025-08-26T21:00:00.000Z",
-  "__export_source": "insomnia.import",
+  "__export_date": "2025-09-02T00:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2023.5.8",
   "resources": [
     {
-      "_id": "wrk_1234567890",
-      "parentId": null,
-      "_type": "workspace",
+      "_id": "req_root",
+      "parentId": "wrk_main",
+      "_type": "request_group",
       "name": "Neat Shoecare API",
-      "description": "Workspace untuk Neat Shoecare Documentation API"
+      "description": "API endpoints for Neat Shoecare service management",
+      "environment": {}
     },
     {
-      "_id": "env_1234567890",
+      "_id": "env_base",
+      "parentId": "wrk_main",
       "_type": "environment",
-      "parentId": "wrk_1234567890",
       "name": "Base Environment",
       "data": {
-        "base_url": "http://localhost:3000"
-      }
+        "base_url": "https://api.neatshoecare.com",
+        "bearer_token": ""
+      },
+      "dataPropertyOrder": {
+        "&": ["base_url", "bearer_token"]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1
+    },
+    {
+      "_id": "wrk_main",
+      "_type": "workspace",
+      "name": "Neat Shoecare API",
+      "description": "Workspace for Neat Shoecare API testing"
+    },
+    {
+      "_id": "fld_app",
+      "parentId": "req_root",
+      "_type": "request_group",
+      "name": "App",
+      "description": "Application status endpoints"
+    },
+    {
+      "_id": "req_app_status",
+      "parentId": "fld_app",
+      "_type": "request",
+      "url": "{{ _.base_url }}/",
+      "name": "Get API Status",
+      "description": "Check API status",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1
     },
     {
       "_id": "fld_auth",
+      "parentId": "req_root",
       "_type": "request_group",
-      "parentId": "wrk_1234567890",
-      "name": "Authentication"
+      "name": "Authentication",
+      "description": "Authentication endpoints"
     },
     {
-      "_id": "req_register",
+      "_id": "req_google_auth",
       "parentId": "fld_auth",
       "_type": "request",
-      "name": "Register User",
+      "url": "{{ _.base_url }}/auth/google",
+      "name": "Google OAuth Login",
+      "description": "Initiate Google OAuth login",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1
+    },
+    {
+      "_id": "req_google_callback",
+      "parentId": "fld_auth",
+      "_type": "request",
+      "url": "{{ _.base_url }}/auth/google/callback",
+      "name": "Google OAuth Callback",
+      "description": "Google OAuth callback endpoint",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -2
+    },
+    {
+      "_id": "req_logout",
+      "parentId": "fld_auth",
+      "_type": "request",
+      "url": "{{ _.base_url }}/auth/logout",
+      "name": "Logout",
+      "description": "Logout user",
       "method": "POST",
-      "url": "{{ base_url }}/auth/register",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.bearer_token }}"
+      },
+      "metaSortKey": -3
+    },
+    {
+      "_id": "req_profile",
+      "parentId": "fld_auth",
+      "_type": "request",
+      "url": "{{ _.base_url }}/auth/profile",
+      "name": "Get Profile",
+      "description": "Get user profile information",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.bearer_token }}"
+      },
+      "metaSortKey": -4
+    },
+    {
+      "_id": "fld_category",
+      "parentId": "req_root",
+      "_type": "request_group",
+      "name": "Category Service",
+      "description": "Category service management endpoints"
+    },
+    {
+      "_id": "req_create_category",
+      "parentId": "fld_category",
+      "_type": "request",
+      "url": "{{ _.base_url }}/category-service",
+      "name": "Create Category Service",
+      "description": "Create a new category service",
+      "method": "POST",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}"
+        "text": "{\n  \"name\": \"Cleaning Service\"\n}"
       },
       "parameters": [],
       "headers": [
@@ -43,7 +149,231 @@
           "name": "Content-Type",
           "value": "application/json"
         }
-      ]
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.bearer_token }}"
+      },
+      "metaSortKey": -1
+    },
+    {
+      "_id": "req_get_all_categories",
+      "parentId": "fld_category",
+      "_type": "request",
+      "url": "{{ _.base_url }}/category-service",
+      "name": "Get All Category Services",
+      "description": "Retrieve all category services",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.bearer_token }}"
+      },
+      "metaSortKey": -2
+    },
+    {
+      "_id": "req_get_category_by_id",
+      "parentId": "fld_category",
+      "_type": "request",
+      "url": "{{ _.base_url }}/category-service/{{ category_id }}",
+      "name": "Get Category Service by ID",
+      "description": "Retrieve category service by ID",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.bearer_token }}"
+      },
+      "metaSortKey": -3
+    },
+    {
+      "_id": "req_update_category",
+      "parentId": "fld_category",
+      "_type": "request",
+      "url": "{{ _.base_url }}/category-service/{{ category_id }}",
+      "name": "Update Category Service",
+      "description": "Update existing category service",
+      "method": "PATCH",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Deep Cleaning Service\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.bearer_token }}"
+      },
+      "metaSortKey": -4
+    },
+    {
+      "_id": "req_delete_category",
+      "parentId": "fld_category",
+      "_type": "request",
+      "url": "{{ _.base_url }}/category-service/{{ category_id }}",
+      "name": "Delete Category Service",
+      "description": "Soft delete category service",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.bearer_token }}"
+      },
+      "metaSortKey": -5
+    },
+    {
+      "_id": "req_restore_category",
+      "parentId": "fld_category",
+      "_type": "request",
+      "url": "{{ _.base_url }}/category-service/{{ category_id }}/restore",
+      "name": "Restore Category Service",
+      "description": "Restore deleted category service",
+      "method": "PATCH",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.bearer_token }}"
+      },
+      "metaSortKey": -6
+    },
+    {
+      "_id": "fld_service",
+      "parentId": "req_root",
+      "_type": "request_group",
+      "name": "Service",
+      "description": "Service management endpoints"
+    },
+    {
+      "_id": "req_create_service",
+      "parentId": "fld_service",
+      "_type": "request",
+      "url": "{{ _.base_url }}/service",
+      "name": "Create Service",
+      "description": "Create a new service",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Premium Shoe Cleaning\",\n  \"categoryId\": \"60b8d295f9e1b2c3d4567890\",\n  \"price\": 50000,\n  \"description\": \"Deep cleaning service for leather shoes\",\n  \"duration\": \"2-3 hours\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.bearer_token }}"
+      },
+      "metaSortKey": -1
+    },
+    {
+      "_id": "req_get_all_services",
+      "parentId": "fld_service",
+      "_type": "request",
+      "url": "{{ _.base_url }}/service",
+      "name": "Get All Services",
+      "description": "Retrieve all services with optional category filter",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "categoryId",
+          "value": "",
+          "description": "Filter by category ID",
+          "disabled": true
+        }
+      ],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -2
+    },
+    {
+      "_id": "req_get_service_by_id",
+      "parentId": "fld_service",
+      "_type": "request",
+      "url": "{{ _.base_url }}/service/{{ service_id }}",
+      "name": "Get Service by ID",
+      "description": "Retrieve service by ID",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -3
+    },
+    {
+      "_id": "req_update_service",
+      "parentId": "fld_service",
+      "_type": "request",
+      "url": "{{ _.base_url }}/service/{{ service_id }}",
+      "name": "Update Service",
+      "description": "Update existing service",
+      "method": "PATCH",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Premium Shoe Cleaning Updated\",\n  \"categoryId\": \"60b8d295f9e1b2c3d4567890\",\n  \"price\": 60000,\n  \"description\": \"Updated description\",\n  \"duration\": \"3-4 hours\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.bearer_token }}"
+      },
+      "metaSortKey": -4
+    },
+    {
+      "_id": "req_delete_service",
+      "parentId": "fld_service",
+      "_type": "request",
+      "url": "{{ _.base_url }}/service/{{ service_id }}",
+      "name": "Delete Service",
+      "description": "Soft delete service",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.bearer_token }}"
+      },
+      "metaSortKey": -5
+    },
+    {
+      "_id": "req_restore_service",
+      "parentId": "fld_service",
+      "_type": "request",
+      "url": "{{ _.base_url }}/service/{{ service_id }}/restore",
+      "name": "Restore Service",
+      "description": "Restore deleted service",
+      "method": "PATCH",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.bearer_token }}"
+      },
+      "metaSortKey": -6
     }
   ]
 }
