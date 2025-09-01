@@ -1,0 +1,49 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2025-08-26T21:00:00.000Z",
+  "__export_source": "insomnia.import",
+  "resources": [
+    {
+      "_id": "wrk_1234567890",
+      "parentId": null,
+      "_type": "workspace",
+      "name": "Neat Shoecare API",
+      "description": "Workspace untuk Neat Shoecare Documentation API"
+    },
+    {
+      "_id": "env_1234567890",
+      "_type": "environment",
+      "parentId": "wrk_1234567890",
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:3000"
+      }
+    },
+    {
+      "_id": "fld_auth",
+      "_type": "request_group",
+      "parentId": "wrk_1234567890",
+      "name": "Authentication"
+    },
+    {
+      "_id": "req_register",
+      "parentId": "fld_auth",
+      "_type": "request",
+      "name": "Register User",
+      "method": "POST",
+      "url": "{{ base_url }}/auth/register",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    }
+  ]
+}

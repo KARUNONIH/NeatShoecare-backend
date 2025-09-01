@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Google Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .btn {
+            background-color: #4285f4;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover {
+            background-color: #357ae8;
+        }
+        .btn-logout {
+            background-color: #dc3545;
+        }
+        .btn-logout:hover {
+            background-color: #c82333;
+        }
+        .btn-profile {
+            background-color: #28a745;
+        }
+        .btn-profile:hover {
+            background-color: #218838;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border-left: 4px solid #007bff;
+        }
+        .token-display {
+            word-break: break-all;
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test Google Login - Neat Shoecare</h1>
+        
+        <div style="text-align: center;">
+            <a href="http://localhost:3000/auth/google" class="btn">
+                🔐 Login with Google
+            </a>
+            
+            <button onclick="logout()" class="btn btn-logout">
+                🚪 Logout
+            </button>
+            
+            <button onclick="getProfile()" class="btn btn-profile">
+                👤 Get Profile
+            </button>
+        </div>
+
+        <div id="result" class="result" style="display: none;">
+            <h3>Result:</h3>
+            <pre id="resultContent"></pre>
+        </div>
+
+        <div id="tokenStorage" style="margin-top: 20px;">
+            <h3>Current Token:</h3>
+            <div id="currentToken" class="token-display">No token stored</div>
+            <button onclick="clearToken()" class="btn btn-logout" style="font-size: 12px; padding: 5px 10px;">
+                Clear Token
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Check if there's a token from URL (after Google callback)
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+            
+            if (token) {
+                localStorage.setItem('access_token', token);
+                showResult('Login successful! Token saved.');
+                updateTokenDisplay();
+                // Clean URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            } else {
+                updateTokenDisplay();
+            }
+        }
+
+        function showResult(message, data = null) {
+            const resultDiv = document.getElementById('result');
+            const resultContent = document.getElementById('resultContent');
+            
+            if (data) {
+                resultContent.textContent = JSON.stringify(data, null, 2);
+            } else {
+                resultContent.textContent = message;
+            }
+            
+            resultDiv.style.display = 'block';
+        }
+
+        function updateTokenDisplay() {
+            const token = localStorage.getItem('access_token');
+            const tokenDiv = document.getElementById('currentToken');
+            
+            if (token) {
+                tokenDiv.textContent = token.substring(0, 50) + '...';
+            } else {
+                tokenDiv.textContent = 'No token stored';
+            }
+        }
+
+        async function logout() {
+            try {
+                const response = await fetch('http://localhost:3000/auth/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                localStorage.removeItem('access_token');
+                updateTokenDisplay();
+                showResult('Logout successful', data);
+            } catch (error) {
+                showResult('Logout error: ' + error.message);
+            }
+        }
+
+        async function getProfile() {
+            const token = localStorage.getItem('access_token');
+            
+            if (!token) {
+                showResult('No token found. Please login first.');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/auth/profile', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    showResult('Profile retrieved successfully:', data);
+                } else {
+                    const error = await response.json();
+                    showResult('Profile error:', error);
+                }
+            } catch (error) {
+                showResult('Profile error: ' + error.message);
+            }
+        }
+
+        function clearToken() {
+            localStorage.removeItem('access_token');
+            updateTokenDisplay();
+            showResult('Token cleared');
+        }
+    </script>
+</body>
+</html>
