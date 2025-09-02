@@ -16,9 +16,13 @@ export class ProfileDto {
 
   @ApiProperty()
   address: string;
+
   @ApiProperty()
   branchId: string;
 
   @ApiProperty({ enum: UserRole })
   role: UserRole;
+
+  @ApiProperty({ required: false })
+  photoProfile?: string;
 }

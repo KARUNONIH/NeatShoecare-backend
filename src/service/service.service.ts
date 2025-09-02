@@ -14,7 +14,6 @@ export class ServiceService {
   ) {}
 
   async create(createDto: CreateServiceDto): Promise<ServiceDocument> {
-    // Verify category exists
     await this.categoryServiceService.findById(createDto.categoryId);
 
     const created = new this.serviceModel(createDto);
@@ -52,7 +51,6 @@ export class ServiceService {
     id: string,
     updateDto: UpdateServiceDto,
   ): Promise<ServiceDocument> {
-    // Verify category exists if categoryId is being updated
     if (updateDto.categoryId) {
       await this.categoryServiceService.findById(updateDto.categoryId);
     }

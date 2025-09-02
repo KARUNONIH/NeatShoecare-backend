@@ -21,5 +21,4 @@ export class CategoryService {
 export const CategoryServiceSchema =
   SchemaFactory.createForClass(CategoryService);
 
-// Add index for soft delete queries
 CategoryServiceSchema.index({ deletedAt: 1 });

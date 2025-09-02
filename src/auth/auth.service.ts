@@ -21,6 +21,7 @@ export class AuthService {
     googleId: string,
     email: string,
     name: string,
+    photoProfile?: string,
   ): Promise<{ access_token: string; profile: any }> {
     let user = await this.userModel.findOne({ googleId });
     if (!user) {
@@ -28,11 +29,17 @@ export class AuthService {
         googleId,
         email,
         name,
+        photoProfile,
         phone: null,
         address: null,
         branchId: null,
         role: UserRole.UNASSIGNED,
       });
+    } else {
+      if (photoProfile && user.photoProfile !== photoProfile) {
+        user.photoProfile = photoProfile;
+        await user.save();
+      }
     }
 
     const payload = {
@@ -49,6 +56,7 @@ export class AuthService {
       address: user.address,
       role: user.role,
       branchId: user.branchId,
+      photoProfile: user.photoProfile,
     };
 
     return {

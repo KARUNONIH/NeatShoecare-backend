@@ -30,6 +30,9 @@ export class User {
   role: UserRole;
 
   @Prop()
+  photoProfile?: string;
+
+  @Prop()
   googleId?: string;
 }
 

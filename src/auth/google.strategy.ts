@@ -17,9 +17,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   authenticate(req: any, options?: any) {
     const modifiedOptions = {
       ...options,
-      prompt: 'select_account'
+      prompt: 'select_account',
     };
-    
+
     return super.authenticate(req, modifiedOptions);
   }
 
@@ -29,11 +29,12 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     profile: any,
     done: VerifyCallback,
   ): Promise<any> {
-    const { id, name, emails } = profile;
+    const { id, name, emails, photos } = profile;
     const user = {
       googleId: id,
       email: emails[0].value,
       name: `${name.givenName} ${name.familyName}`,
+      photoProfile: photos && photos.length > 0 ? photos[0].value : null,
     };
     done(null, user);
   }

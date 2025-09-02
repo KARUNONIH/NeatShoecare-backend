@@ -40,16 +40,35 @@ export class AuthController {
         req.user.googleId,
         req.user.email,
         req.user.name,
+        req.user.photoProfile,
       );
 
-      const frontendRedirectUrl = process.env.FRONTEND_REDIRECT_URL;
-      if (!frontendRedirectUrl) {
-        throw new InternalServerErrorException(
-          'Frontend redirect URL not configured',
+      let redirectUrl: string;
+      if (result.profile.role === 'unassigned') {
+        const unassignedUrl = process.env.FRONTEND_REDIRECT_UNASSIGMENT_URL;
+        if (!unassignedUrl) {
+          throw new InternalServerErrorException(
+            'Frontend unassigned redirect URL not configured',
+          );
+        }
+        redirectUrl = unassignedUrl;
+        console.log(
+          `Redirecting unassigned user ${result.profile.email} to: ${redirectUrl}`,
         );
+        res.redirect(redirectUrl);
+      } else {
+        const frontendUrl = process.env.FRONTEND_REDIRECT_URL;
+        if (!frontendUrl) {
+          throw new InternalServerErrorException(
+            'Frontend redirect URL not configured',
+          );
+        }
+        redirectUrl = frontendUrl;
+        console.log(
+          `Redirecting ${result.profile.role} user ${result.profile.email} to: ${redirectUrl}`,
+        );
+        res.redirect(`${redirectUrl}?token=${result.access_token}`);
       }
-
-      res.redirect(`${frontendRedirectUrl}?token=${result.access_token}`);
     } catch (error) {
       if (error instanceof HttpException) {
         throw error;
@@ -131,6 +150,7 @@ export class AuthController {
           phone: user.phone,
           address: user.address,
           role: user.role,
+          photoProfile: user.photoProfile,
         },
       };
     } catch (error) {

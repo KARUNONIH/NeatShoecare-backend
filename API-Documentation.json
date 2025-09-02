@@ -19,10 +19,15 @@
       "name": "Base Environment",
       "data": {
         "base_url": "https://api.neatshoecare.com",
-        "bearer_token": ""
+        "bearer_token": "",
+        "category_id": "60b8d295f9e1b2c3d4567890",
+        "service_id": "60b8d295f9e1b2c3d4567891",
+        "order_id": "60b8d295f9e1b2c3d4567892",
+        "group_id": "60b8d295f9e1b2c3d4567893",
+        "unique_code": "ABC123"
       },
       "dataPropertyOrder": {
-        "&": ["base_url", "bearer_token"]
+        "&": ["base_url", "bearer_token", "category_id", "service_id", "order_id", "group_id", "unique_code"]
       },
       "color": null,
       "isPrivate": false,
@@ -177,7 +182,7 @@
       "_id": "req_get_category_by_id",
       "parentId": "fld_category",
       "_type": "request",
-      "url": "{{ _.base_url }}/category-service/{{ category_id }}",
+      "url": "{{ _.base_url }}/category-service/{{ _.category_id }}",
       "name": "Get Category Service by ID",
       "description": "Retrieve category service by ID",
       "method": "GET",
@@ -194,7 +199,7 @@
       "_id": "req_update_category",
       "parentId": "fld_category",
       "_type": "request",
-      "url": "{{ _.base_url }}/category-service/{{ category_id }}",
+      "url": "{{ _.base_url }}/category-service/{{ _.category_id }}",
       "name": "Update Category Service",
       "description": "Update existing category service",
       "method": "PATCH",
@@ -219,7 +224,7 @@
       "_id": "req_delete_category",
       "parentId": "fld_category",
       "_type": "request",
-      "url": "{{ _.base_url }}/category-service/{{ category_id }}",
+      "url": "{{ _.base_url }}/category-service/{{ _.category_id }}",
       "name": "Delete Category Service",
       "description": "Soft delete category service",
       "method": "DELETE",
@@ -236,7 +241,7 @@
       "_id": "req_restore_category",
       "parentId": "fld_category",
       "_type": "request",
-      "url": "{{ _.base_url }}/category-service/{{ category_id }}/restore",
+      "url": "{{ _.base_url }}/category-service/{{ _.category_id }}/restore",
       "name": "Restore Category Service",
       "description": "Restore deleted category service",
       "method": "PATCH",
@@ -266,7 +271,7 @@
       "method": "POST",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"name\": \"Premium Shoe Cleaning\",\n  \"categoryId\": \"60b8d295f9e1b2c3d4567890\",\n  \"price\": 50000,\n  \"description\": \"Deep cleaning service for leather shoes\",\n  \"duration\": \"2-3 hours\"\n}"
+        "text": "{\n  \"name\": \"Premium Shoe Cleaning\",\n  \"categoryId\": \"{{ _.category_id }}\",\n  \"price\": 50000,\n  \"description\": \"Deep cleaning service for leather shoes\",\n  \"duration\": \"2-3 hours\"\n}"
       },
       "parameters": [],
       "headers": [
@@ -293,7 +298,7 @@
       "parameters": [
         {
           "name": "categoryId",
-          "value": "",
+          "value": "{{ _.category_id }}",
           "description": "Filter by category ID",
           "disabled": true
         }
@@ -306,7 +311,7 @@
       "_id": "req_get_service_by_id",
       "parentId": "fld_service",
       "_type": "request",
-      "url": "{{ _.base_url }}/service/{{ service_id }}",
+      "url": "{{ _.base_url }}/service/{{ _.service_id }}",
       "name": "Get Service by ID",
       "description": "Retrieve service by ID",
       "method": "GET",
@@ -320,13 +325,13 @@
       "_id": "req_update_service",
       "parentId": "fld_service",
       "_type": "request",
-      "url": "{{ _.base_url }}/service/{{ service_id }}",
+      "url": "{{ _.base_url }}/service/{{ _.service_id }}",
       "name": "Update Service",
       "description": "Update existing service",
       "method": "PATCH",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"name\": \"Premium Shoe Cleaning Updated\",\n  \"categoryId\": \"60b8d295f9e1b2c3d4567890\",\n  \"price\": 60000,\n  \"description\": \"Updated description\",\n  \"duration\": \"3-4 hours\"\n}"
+        "text": "{\n  \"name\": \"Premium Shoe Cleaning Updated\",\n  \"categoryId\": \"{{ _.category_id }}\",\n  \"price\": 60000,\n  \"description\": \"Updated description\",\n  \"duration\": \"3-4 hours\"\n}"
       },
       "parameters": [],
       "headers": [
@@ -345,7 +350,7 @@
       "_id": "req_delete_service",
       "parentId": "fld_service",
       "_type": "request",
-      "url": "{{ _.base_url }}/service/{{ service_id }}",
+      "url": "{{ _.base_url }}/service/{{ _.service_id }}",
       "name": "Delete Service",
       "description": "Soft delete service",
       "method": "DELETE",
@@ -362,7 +367,7 @@
       "_id": "req_restore_service",
       "parentId": "fld_service",
       "_type": "request",
-      "url": "{{ _.base_url }}/service/{{ service_id }}/restore",
+      "url": "{{ _.base_url }}/service/{{ _.service_id }}/restore",
       "name": "Restore Service",
       "description": "Restore deleted service",
       "method": "PATCH",
@@ -374,6 +379,243 @@
         "token": "{{ _.bearer_token }}"
       },
       "metaSortKey": -6
+    },
+    {
+      "_id": "fld_order",
+      "parentId": "req_root",
+      "_type": "request_group",
+      "name": "Order",
+      "description": "Order management endpoints"
+    },
+    {
+      "_id": "req_create_order",
+      "parentId": "fld_order",
+      "_type": "request",
+      "url": "{{ _.base_url }}/order",
+      "name": "Create Order",
+      "description": "Create a new order",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"orderGroupId\": \"{{ _.group_id }}\",\n  \"uniqueCode\": \"{{ _.unique_code }}\",\n  \"serviceId\": \"{{ _.service_id }}\",\n  \"status\": \"requested\",\n  \"paymentStatus\": \"unpaid\",\n  \"paymentMethod\": \"cash\",\n  \"pickupDelivery\": true,\n  \"pickupNote\": \"Pickup at lobby\",\n  \"startDate\": \"2025-09-03\",\n  \"endDate\": \"2025-09-05\",\n  \"amount\": 50000,\n  \"serviceNote\": \"Handle with care\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.bearer_token }}"
+      },
+      "metaSortKey": -1
+    },
+    {
+      "_id": "req_get_all_orders",
+      "parentId": "fld_order",
+      "_type": "request",
+      "url": "{{ _.base_url }}/order",
+      "name": "Get All Orders",
+      "description": "Retrieve all orders",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.bearer_token }}"
+      },
+      "metaSortKey": -2
+    },
+    {
+      "_id": "req_get_order_by_id",
+      "parentId": "fld_order",
+      "_type": "request",
+      "url": "{{ _.base_url }}/order/{{ _.order_id }}",
+      "name": "Get Order by ID",
+      "description": "Retrieve order by ID",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.bearer_token }}"
+      },
+      "metaSortKey": -3
+    },
+    {
+      "_id": "req_get_orders_by_group",
+      "parentId": "fld_order",
+      "_type": "request",
+      "url": "{{ _.base_url }}/order/group/{{ _.group_id }}",
+      "name": "Get Orders by Group ID",
+      "description": "Retrieve orders by group ID",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.bearer_token }}"
+      },
+      "metaSortKey": -4
+    },
+    {
+      "_id": "req_get_my_orders",
+      "parentId": "fld_order",
+      "_type": "request",
+      "url": "{{ _.base_url }}/order/my-order/{{ _.group_id }}/unique-code/{{ _.unique_code }}",
+      "name": "Get My Orders (No Auth)",
+      "description": "Get my orders by group ID and unique code (no auth required)",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -5
+    },
+    {
+      "_id": "req_update_order",
+      "parentId": "fld_order",
+      "_type": "request",
+      "url": "{{ _.base_url }}/order/{{ _.order_id }}",
+      "name": "Update Order",
+      "description": "Update existing order",
+      "method": "PATCH",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"status\": \"inProgress\",\n  \"paymentStatus\": \"paid\",\n  \"paymentMethod\": \"transfer\",\n  \"serviceNote\": \"Updated service note\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.bearer_token }}"
+      },
+      "metaSortKey": -6
+    },
+    {
+      "_id": "req_upload_photos",
+      "parentId": "fld_order",
+      "_type": "request",
+      "url": "{{ _.base_url }}/order/{{ _.order_id }}/photos",
+      "name": "Upload Photos",
+      "description": "Upload photos (before and/or after)",
+      "method": "POST",
+      "body": {
+        "mimeType": "multipart/form-data",
+        "params": [
+          {
+            "name": "photos",
+            "value": "",
+            "description": "Photo files",
+            "type": "file",
+            "fileName": ""
+          }
+        ]
+      },
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.bearer_token }}"
+      },
+      "metaSortKey": -7
+    },
+    {
+      "_id": "req_update_photos",
+      "parentId": "fld_order",
+      "_type": "request",
+      "url": "{{ _.base_url }}/order/{{ _.order_id }}/photos",
+      "name": "Update Photos",
+      "description": "Update photos (before and/or after)",
+      "method": "PATCH",
+      "body": {
+        "mimeType": "multipart/form-data",
+        "params": [
+          {
+            "name": "photos",
+            "value": "",
+            "description": "Photo files",
+            "type": "file",
+            "fileName": ""
+          }
+        ]
+      },
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.bearer_token }}"
+      },
+      "metaSortKey": -8
+    },
+    {
+      "_id": "req_delete_photos",
+      "parentId": "fld_order",
+      "_type": "request",
+      "url": "{{ _.base_url }}/order/{{ _.order_id }}/photos",
+      "name": "Delete Photos",
+      "description": "Delete photos (before and/or after)",
+      "method": "DELETE",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"deletePhotoBefore\": true,\n  \"deletePhotoAfter\": false\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.bearer_token }}"
+      },
+      "metaSortKey": -9
+    },
+    {
+      "_id": "req_delete_order",
+      "parentId": "fld_order",
+      "_type": "request",
+      "url": "{{ _.base_url }}/order/{{ _.order_id }}",
+      "name": "Delete Order",
+      "description": "Soft delete order",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.bearer_token }}"
+      },
+      "metaSortKey": -10
+    },
+    {
+      "_id": "req_restore_order",
+      "parentId": "fld_order",
+      "_type": "request",
+      "url": "{{ _.base_url }}/order/{{ _.order_id }}/restore",
+      "name": "Restore Order",
+      "description": "Restore deleted order",
+      "method": "PATCH",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.bearer_token }}"
+      },
+      "metaSortKey": -11
     }
   ]
 }
