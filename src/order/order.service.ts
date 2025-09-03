@@ -8,23 +8,23 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Order, OrderDocument } from './order.schema';
 import { CreateOrderDto, UpdateOrderDto } from './dto/order.dto';
-import { GoogleDriveService } from './google-drive.service';
+import { GoogleDriveOAuthService } from './google-drive-oauth.service';
 
 @Injectable()
 export class OrderService {
   constructor(
     @InjectModel(Order.name) private orderModel: Model<OrderDocument>,
-    private googleDriveService: GoogleDriveService,
+    private googleDriveService: GoogleDriveOAuthService,
   ) {}
 
   async create(createOrderDto: CreateOrderDto): Promise<OrderDocument> {
     try {
+      const orderGroupId = new Types.ObjectId();
+
       const orderData = {
         ...createOrderDto,
         serviceId: new Types.ObjectId(createOrderDto.serviceId),
-        orderGroupId: createOrderDto.orderGroupId
-          ? new Types.ObjectId(createOrderDto.orderGroupId)
-          : null,
+        orderGroupId: orderGroupId,
         uniqueCode: createOrderDto.uniqueCode,
         startDate: createOrderDto.startDate
           ? new Date(createOrderDto.startDate)
@@ -36,18 +36,6 @@ export class OrderService {
 
       const order = new this.orderModel(orderData);
       const savedOrder = await order.save();
-
-      if (createOrderDto.orderGroupId) {
-        await this.orderModel.updateMany(
-          {
-            orderGroupId: new Types.ObjectId(createOrderDto.orderGroupId),
-            isDeleted: false,
-          },
-          {
-            $set: { uniqueCode: createOrderDto.uniqueCode },
-          },
-        );
-      }
 
       return savedOrder;
     } catch (error) {
@@ -162,11 +150,6 @@ export class OrderService {
 
       if (updateOrderDto.serviceId) {
         updateData.serviceId = new Types.ObjectId(updateOrderDto.serviceId);
-      }
-      if (updateOrderDto.orderGroupId) {
-        updateData.orderGroupId = new Types.ObjectId(
-          updateOrderDto.orderGroupId,
-        );
       }
 
       if (updateOrderDto.startDate) {
@@ -302,8 +285,13 @@ export class OrderService {
           fileNameBefore,
         );
 
+        const directUrlBefore = await this.googleDriveService.getDirectImageUrl(
+          uploadResultBefore.fileId,
+        );
+
         updateData.photoBefore = uploadResultBefore.webViewLink;
         updateData.photoBeforeId = uploadResultBefore.fileId;
+        updateData.photoBeforeUrl = directUrlBefore;
       }
 
       if (files.photoAfter) {
@@ -316,8 +304,13 @@ export class OrderService {
           fileNameAfter,
         );
 
+        const directUrlAfter = await this.googleDriveService.getDirectImageUrl(
+          uploadResultAfter.fileId,
+        );
+
         updateData.photoAfter = uploadResultAfter.webViewLink;
         updateData.photoAfterId = uploadResultAfter.fileId;
+        updateData.photoAfterUrl = directUrlAfter;
       }
 
       const updatedOrder = await this.orderModel
@@ -336,13 +329,43 @@ export class OrderService {
 
       return updatedOrder;
     } catch (error) {
+      console.error('Upload photos error:', error);
+
       if (
         error instanceof BadRequestException ||
         error instanceof NotFoundException
       ) {
         throw error;
       }
-      throw new InternalServerErrorException('Failed to upload photos');
+
+      // Handle specific Google Drive errors
+      if (
+        error.message &&
+        error.message.includes('Service Accounts do not have storage quota')
+      ) {
+        throw new InternalServerErrorException(
+          'Google Drive storage quota exceeded. Please check your Google Drive configuration or contact administrator.',
+        );
+      }
+
+      if (error.message && error.message.includes('403')) {
+        throw new InternalServerErrorException(
+          'Access denied to Google Drive. Please verify service account permissions.',
+        );
+      }
+
+      if (
+        error.message &&
+        error.message.includes('Failed to upload file to Google Drive')
+      ) {
+        throw new InternalServerErrorException(
+          'Failed to upload photos to Google Drive: ' + error.message,
+        );
+      }
+
+      throw new InternalServerErrorException(
+        'Failed to upload photos: ' + (error.message || 'Unknown error'),
+      );
     }
   }
 
@@ -364,6 +387,7 @@ export class OrderService {
 
         updateData.photoBefore = null;
         updateData.photoBeforeId = null;
+        updateData.photoBeforeUrl = null;
       }
 
       if (photoType === 'after' || photoType === 'both') {
@@ -372,6 +396,7 @@ export class OrderService {
 
         updateData.photoAfter = null;
         updateData.photoAfterId = null;
+        updateData.photoAfterUrl = null;
       }
 
       const updatedOrder = await this.orderModel

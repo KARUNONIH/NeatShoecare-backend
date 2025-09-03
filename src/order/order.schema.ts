@@ -66,10 +66,16 @@ export class Order {
   photoBeforeId: string;
 
   @Prop({ default: null })
+  photoBeforeUrl: string;
+
+  @Prop({ default: null })
   photoAfter: string;
 
   @Prop({ default: null })
   photoAfterId: string;
+
+  @Prop({ default: null })
+  photoAfterUrl: string;
 
   @Prop({ default: null })
   serviceNote: string;

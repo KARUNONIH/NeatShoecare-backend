@@ -24,7 +24,7 @@ import {
   ApiConsumes,
   ApiBody,
 } from '@nestjs/swagger';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { OrderService } from './order.service';
 import {
   CreateOrderDto,
@@ -235,10 +235,19 @@ export class OrderController {
   @ApiOperation({ summary: 'Upload photos (before and/or after)' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({ type: UpdatePhotoDto })
-  @UseInterceptors(FilesInterceptor('photos', 2))
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'photoBefore', maxCount: 1 },
+      { name: 'photoAfter', maxCount: 1 },
+    ]),
+  )
   async uploadPhotos(
     @Param('id') id: string,
-    @UploadedFiles() files: Express.Multer.File[],
+    @UploadedFiles()
+    files: {
+      photoBefore?: Express.Multer.File[];
+      photoAfter?: Express.Multer.File[];
+    },
     @Body() updatePhotoDto: UpdatePhotoDto,
   ) {
     try {
@@ -246,18 +255,22 @@ export class OrderController {
         throw new BadRequestException('Invalid order ID format');
       }
 
-      if (!files || files.length === 0) {
-        throw new BadRequestException('At least one photo file is required');
-      }
+      const hasPhotoBefore = files?.photoBefore && files.photoBefore.length > 0;
+      const hasPhotoAfter = files?.photoAfter && files.photoAfter.length > 0;
 
-      if (files.length > 2) {
-        throw new BadRequestException('Maximum 2 photos allowed');
+      if (!hasPhotoBefore && !hasPhotoAfter) {
+        throw new BadRequestException('At least one photo file is required');
       }
 
       const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       const maxSize = 5 * 1024 * 1024;
 
-      for (const file of files) {
+      const allFiles = [
+        ...(files?.photoBefore || []),
+        ...(files?.photoAfter || []),
+      ];
+
+      for (const file of allFiles) {
         if (!allowedMimeTypes.includes(file.mimetype)) {
           throw new BadRequestException(
             'Only JPEG, PNG, and JPG files are allowed',
@@ -274,12 +287,12 @@ export class OrderController {
         photoAfter?: Express.Multer.File;
       } = {};
 
-      for (const file of files) {
-        if (file.fieldname === 'photoBefore') {
-          fileObj.photoBefore = file;
-        } else if (file.fieldname === 'photoAfter') {
-          fileObj.photoAfter = file;
-        }
+      if (hasPhotoBefore) {
+        fileObj.photoBefore = files.photoBefore![0];
+      }
+
+      if (hasPhotoAfter) {
+        fileObj.photoAfter = files.photoAfter![0];
       }
 
       const order = await this.orderService.uploadPhotos(id, fileObj);
@@ -303,10 +316,19 @@ export class OrderController {
   @ApiOperation({ summary: 'Update photos (before and/or after)' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({ type: UpdatePhotoDto })
-  @UseInterceptors(FilesInterceptor('photos', 2))
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'photoBefore', maxCount: 1 },
+      { name: 'photoAfter', maxCount: 1 },
+    ]),
+  )
   async updatePhotos(
     @Param('id') id: string,
-    @UploadedFiles() files: Express.Multer.File[],
+    @UploadedFiles()
+    files: {
+      photoBefore?: Express.Multer.File[];
+      photoAfter?: Express.Multer.File[];
+    },
     @Body() updatePhotoDto: UpdatePhotoDto,
   ) {
     try {
@@ -314,18 +336,22 @@ export class OrderController {
         throw new BadRequestException('Invalid order ID format');
       }
 
-      if (!files || files.length === 0) {
-        throw new BadRequestException('At least one photo file is required');
-      }
+      const hasPhotoBefore = files?.photoBefore && files.photoBefore.length > 0;
+      const hasPhotoAfter = files?.photoAfter && files.photoAfter.length > 0;
 
-      if (files.length > 2) {
-        throw new BadRequestException('Maximum 2 photos allowed');
+      if (!hasPhotoBefore && !hasPhotoAfter) {
+        throw new BadRequestException('At least one photo file is required');
       }
 
       const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       const maxSize = 5 * 1024 * 1024;
 
-      for (const file of files) {
+      const allFiles = [
+        ...(files?.photoBefore || []),
+        ...(files?.photoAfter || []),
+      ];
+
+      for (const file of allFiles) {
         if (!allowedMimeTypes.includes(file.mimetype)) {
           throw new BadRequestException(
             'Only JPEG, PNG, and JPG files are allowed',
@@ -342,12 +368,12 @@ export class OrderController {
         photoAfter?: Express.Multer.File;
       } = {};
 
-      for (const file of files) {
-        if (file.fieldname === 'photoBefore') {
-          fileObj.photoBefore = file;
-        } else if (file.fieldname === 'photoAfter') {
-          fileObj.photoAfter = file;
-        }
+      if (hasPhotoBefore) {
+        fileObj.photoBefore = files.photoBefore![0];
+      }
+
+      if (hasPhotoAfter) {
+        fileObj.photoAfter = files.photoAfter![0];
       }
 
       const order = await this.orderService.uploadPhotos(id, fileObj);
@@ -486,8 +512,10 @@ export class OrderController {
       amount: order.amount,
       photoBefore: order.photoBefore,
       photoBeforeId: order.photoBeforeId,
+      photoBeforeUrl: order.photoBeforeUrl || null,
       photoAfter: order.photoAfter,
       photoAfterId: order.photoAfterId,
+      photoAfterUrl: order.photoAfterUrl || null,
       serviceNote: order.serviceNote,
       createdAt: order.createdAt,
       updatedAt: order.updatedAt,

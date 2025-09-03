@@ -13,14 +13,6 @@ import { Transform } from 'class-transformer';
 import { OrderStatus, PaymentStatus, PaymentMethod } from '../order.schema';
 
 export class CreateOrderDto {
-  @ApiProperty({
-    description: 'ID order utama untuk mengelompokkan beberapa service',
-    required: false,
-  })
-  @IsOptional()
-  @IsMongoId()
-  orderGroupId?: string;
-
   @ApiProperty({ description: 'Unique code for order group' })
   @IsString()
   uniqueCode: string;
@@ -145,10 +137,16 @@ export class OrderResponseDto {
   photoBeforeId?: string;
 
   @ApiProperty({ required: false })
+  photoBeforeUrl?: string;
+
+  @ApiProperty({ required: false })
   photoAfter?: string;
 
   @ApiProperty({ required: false })
   photoAfterId?: string;
+
+  @ApiProperty({ required: false })
+  photoAfterUrl?: string;
 
   @ApiProperty({ required: false })
   serviceNote?: string;

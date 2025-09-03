@@ -34,6 +34,22 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 export class ServiceController {
   constructor(private readonly serviceService: ServiceService) {}
 
+  private formatServiceResponse(service: any) {
+    return {
+      id: service.id,
+      name: service.name,
+      categoryId:
+        (service.categoryId as any)._id?.toString() ||
+        service.categoryId.toString(),
+      category: (service.categoryId as any).name,
+      price: service.price,
+      description: service.description,
+      duration: service.duration,
+      createdAt: service.createdAt,
+      updatedAt: service.updatedAt,
+    };
+  }
+
   @UseGuards(JwtAuthGuard)
   @Post()
   @ApiBearerAuth()
@@ -60,17 +76,7 @@ export class ServiceController {
         message: 'Service created successfully',
         status: 'success',
         code: HttpStatus.CREATED,
-        data: {
-          id: populated.id,
-          name: populated.name,
-          categoryId: populated.categoryId.toString(),
-          category: (populated.categoryId as any).name,
-          price: populated.price,
-          description: populated.description,
-          duration: populated.duration,
-          createdAt: populated.createdAt,
-          updatedAt: populated.updatedAt,
-        },
+        data: this.formatServiceResponse(populated),
       };
     } catch (error) {
       if (error instanceof HttpException) {
@@ -114,17 +120,7 @@ export class ServiceController {
         message: 'Services fetched successfully',
         status: 'success',
         code: HttpStatus.OK,
-        data: services.map((service) => ({
-          id: service.id,
-          name: service.name,
-          categoryId: service.categoryId.toString(),
-          category: (service.categoryId as any).name,
-          price: service.price,
-          description: service.description,
-          duration: service.duration,
-          createdAt: service.createdAt,
-          updatedAt: service.updatedAt,
-        })),
+        data: services.map((service) => this.formatServiceResponse(service)),
       };
     } catch (error) {
       if (error instanceof HttpException) {
@@ -152,17 +148,7 @@ export class ServiceController {
         message: 'Service fetched successfully',
         status: 'success',
         code: HttpStatus.OK,
-        data: {
-          id: service.id,
-          name: service.name,
-          categoryId: service.categoryId.toString(),
-          category: (service.categoryId as any).name,
-          price: service.price,
-          description: service.description,
-          duration: service.duration,
-          createdAt: service.createdAt,
-          updatedAt: service.updatedAt,
-        },
+        data: this.formatServiceResponse(service),
       };
     } catch (error) {
       if (error instanceof HttpException) {
@@ -201,17 +187,7 @@ export class ServiceController {
         message: 'Service updated successfully',
         status: 'success',
         code: HttpStatus.OK,
-        data: {
-          id: service.id,
-          name: service.name,
-          categoryId: service.categoryId.toString(),
-          category: (service.categoryId as any).name,
-          price: service.price,
-          description: service.description,
-          duration: service.duration,
-          createdAt: service.createdAt,
-          updatedAt: service.updatedAt,
-        },
+        data: this.formatServiceResponse(service),
       };
     } catch (error) {
       if (error instanceof HttpException) {
@@ -284,17 +260,7 @@ export class ServiceController {
         message: 'Service restored successfully',
         status: 'success',
         code: HttpStatus.OK,
-        data: {
-          id: service.id,
-          name: service.name,
-          categoryId: service.categoryId.toString(),
-          category: (service.categoryId as any).name,
-          price: service.price,
-          description: service.description,
-          duration: service.duration,
-          createdAt: service.createdAt,
-          updatedAt: service.updatedAt,
-        },
+        data: this.formatServiceResponse(service),
       };
     } catch (error) {
       if (error instanceof HttpException) {
