@@ -7,15 +7,19 @@ import { ServiceModule } from './service/service.module';
 import { OrderModule } from './order/order.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
+import { TransactionCategoryModule } from './transaction-category/transaction-category.module';
+import { TransactionModule } from './transaction/transaction.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(process.env.MONGO_URI || ''),
     AuthModule,
-    CategoryServiceModule,
+  CategoryServiceModule,
     ServiceModule,
     OrderModule,
+  TransactionCategoryModule,
+  TransactionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
