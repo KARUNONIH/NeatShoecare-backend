@@ -1,76 +1,30 @@
 {
   "_type": "export",
   "__export_format": 4,
-  "__export_date": "2025-09-02T00:00:00.000Z",
+  "__export_date": "2025-01-13T10:00:00.000Z",
   "__export_source": "insomnia.desktop.app:v2023.5.8",
   "resources": [
     {
-      "_id": "req_root",
-      "parentId": "wrk_main",
-      "_type": "request_group",
-      "name": "Neat Shoecare API",
-      "description": "API endpoints for Neat Shoecare service management",
-      "environment": {}
-    },
-    {
-      "_id": "env_base",
-      "parentId": "wrk_main",
-      "_type": "environment",
-      "name": "Base Environment",
-      "data": {
-        "base_url": "https://api.neatshoecare.com",
-        "bearer_token": "",
-        "category_id": "60b8d295f9e1b2c3d4567890",
-        "service_id": "60b8d295f9e1b2c3d4567891",
-        "order_id": "60b8d295f9e1b2c3d4567892",
-        "group_id": "60b8d295f9e1b2c3d4567893",
-        "unique_code": "ABC123"
-      },
-      "dataPropertyOrder": {
-        "&": ["base_url", "bearer_token", "category_id", "service_id", "order_id", "group_id", "unique_code"]
-      },
-      "color": null,
-      "isPrivate": false,
-      "metaSortKey": 1
-    },
-    {
-      "_id": "wrk_main",
-      "_type": "workspace",
-      "name": "Neat Shoecare API",
-      "description": "Workspace for Neat Shoecare API testing"
-    },
-    {
-      "_id": "fld_app",
-      "parentId": "req_root",
-      "_type": "request_group",
-      "name": "App",
-      "description": "Application status endpoints"
-    },
-    {
       "_id": "req_app_status",
       "parentId": "fld_app",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/",
       "name": "Get API Status",
-      "description": "Check API status",
+      "description": "Check API server status",
       "method": "GET",
       "body": {},
       "parameters": [],
       "headers": [],
       "authentication": {},
-      "metaSortKey": -1
+      "metaSortKey": -1705147200000,
+      "_type": "request"
     },
     {
-      "_id": "fld_auth",
-      "parentId": "req_root",
-      "_type": "request_group",
-      "name": "Authentication",
-      "description": "Authentication endpoints"
-    },
-    {
-      "_id": "req_google_auth",
+      "_id": "req_auth_google",
       "parentId": "fld_auth",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/auth/google",
       "name": "Google OAuth Login",
       "description": "Initiate Google OAuth login",
@@ -79,12 +33,14 @@
       "parameters": [],
       "headers": [],
       "authentication": {},
-      "metaSortKey": -1
+      "metaSortKey": -1705147200000,
+      "_type": "request"
     },
     {
-      "_id": "req_google_callback",
+      "_id": "req_auth_callback",
       "parentId": "fld_auth",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/auth/google/callback",
       "name": "Google OAuth Callback",
       "description": "Google OAuth callback endpoint",
@@ -93,53 +49,52 @@
       "parameters": [],
       "headers": [],
       "authentication": {},
-      "metaSortKey": -2
+      "metaSortKey": -1705147199000,
+      "_type": "request"
     },
     {
-      "_id": "req_logout",
+      "_id": "req_auth_profile",
       "parentId": "fld_auth",
-      "_type": "request",
-      "url": "{{ _.base_url }}/auth/logout",
-      "name": "Logout",
-      "description": "Logout user",
-      "method": "POST",
-      "body": {},
-      "parameters": [],
-      "headers": [],
-      "authentication": {
-        "type": "bearer",
-        "token": "{{ _.bearer_token }}"
-      },
-      "metaSortKey": -3
-    },
-    {
-      "_id": "req_profile",
-      "parentId": "fld_auth",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/auth/profile",
-      "name": "Get Profile",
-      "description": "Get user profile information",
+      "name": "Get User Profile",
+      "description": "Get current user profile",
       "method": "GET",
       "body": {},
       "parameters": [],
       "headers": [],
       "authentication": {
         "type": "bearer",
-        "token": "{{ _.bearer_token }}"
+        "token": "{{ _.jwt_token }}"
       },
-      "metaSortKey": -4
+      "metaSortKey": -1705147198000,
+      "_type": "request"
     },
     {
-      "_id": "fld_category",
-      "parentId": "req_root",
-      "_type": "request_group",
-      "name": "Category Service",
-      "description": "Category service management endpoints"
+      "_id": "req_auth_logout",
+      "parentId": "fld_auth",
+      "modified": 1705147200000,
+      "created": 1705147200000,
+      "url": "{{ _.base_url }}/auth/logout",
+      "name": "Logout User",
+      "description": "Logout current user",
+      "method": "POST",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.jwt_token }}"
+      },
+      "metaSortKey": -1705147197000,
+      "_type": "request"
     },
     {
-      "_id": "req_create_category",
+      "_id": "req_category_create",
       "parentId": "fld_category",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/category-service",
       "name": "Create Category Service",
       "description": "Create a new category service",
@@ -157,51 +112,57 @@
       ],
       "authentication": {
         "type": "bearer",
-        "token": "{{ _.bearer_token }}"
+        "token": "{{ _.jwt_token }}"
       },
-      "metaSortKey": -1
+      "metaSortKey": -1705147200000,
+      "_type": "request"
     },
     {
-      "_id": "req_get_all_categories",
+      "_id": "req_category_get_all",
       "parentId": "fld_category",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/category-service",
       "name": "Get All Category Services",
-      "description": "Retrieve all category services",
+      "description": "Get all category services",
       "method": "GET",
       "body": {},
       "parameters": [],
       "headers": [],
       "authentication": {
         "type": "bearer",
-        "token": "{{ _.bearer_token }}"
+        "token": "{{ _.jwt_token }}"
       },
-      "metaSortKey": -2
+      "metaSortKey": -1705147199000,
+      "_type": "request"
     },
     {
-      "_id": "req_get_category_by_id",
+      "_id": "req_category_get_by_id",
       "parentId": "fld_category",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/category-service/{{ _.category_id }}",
       "name": "Get Category Service by ID",
-      "description": "Retrieve category service by ID",
+      "description": "Get category service by ID",
       "method": "GET",
       "body": {},
       "parameters": [],
       "headers": [],
       "authentication": {
         "type": "bearer",
-        "token": "{{ _.bearer_token }}"
+        "token": "{{ _.jwt_token }}"
       },
-      "metaSortKey": -3
+      "metaSortKey": -1705147198000,
+      "_type": "request"
     },
     {
-      "_id": "req_update_category",
+      "_id": "req_category_update",
       "parentId": "fld_category",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/category-service/{{ _.category_id }}",
       "name": "Update Category Service",
-      "description": "Update existing category service",
+      "description": "Update category service",
       "method": "PATCH",
       "body": {
         "mimeType": "application/json",
@@ -216,16 +177,18 @@
       ],
       "authentication": {
         "type": "bearer",
-        "token": "{{ _.bearer_token }}"
+        "token": "{{ _.jwt_token }}"
       },
-      "metaSortKey": -4
+      "metaSortKey": -1705147197000,
+      "_type": "request"
     },
     {
-      "_id": "req_delete_category",
+      "_id": "req_category_delete",
       "parentId": "fld_category",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/category-service/{{ _.category_id }}",
-      "name": "Delete Category Service",
+      "name": "Soft Delete Category Service",
       "description": "Soft delete category service",
       "method": "DELETE",
       "body": {},
@@ -233,14 +196,16 @@
       "headers": [],
       "authentication": {
         "type": "bearer",
-        "token": "{{ _.bearer_token }}"
+        "token": "{{ _.jwt_token }}"
       },
-      "metaSortKey": -5
+      "metaSortKey": -1705147196000,
+      "_type": "request"
     },
     {
-      "_id": "req_restore_category",
+      "_id": "req_category_restore",
       "parentId": "fld_category",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/category-service/{{ _.category_id }}/restore",
       "name": "Restore Category Service",
       "description": "Restore deleted category service",
@@ -250,21 +215,16 @@
       "headers": [],
       "authentication": {
         "type": "bearer",
-        "token": "{{ _.bearer_token }}"
+        "token": "{{ _.jwt_token }}"
       },
-      "metaSortKey": -6
+      "metaSortKey": -1705147195000,
+      "_type": "request"
     },
     {
-      "_id": "fld_service",
-      "parentId": "req_root",
-      "_type": "request_group",
-      "name": "Service",
-      "description": "Service management endpoints"
-    },
-    {
-      "_id": "req_create_service",
+      "_id": "req_service_create",
       "parentId": "fld_service",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/service",
       "name": "Create Service",
       "description": "Create a new service",
@@ -282,17 +242,19 @@
       ],
       "authentication": {
         "type": "bearer",
-        "token": "{{ _.bearer_token }}"
+        "token": "{{ _.jwt_token }}"
       },
-      "metaSortKey": -1
+      "metaSortKey": -1705147200000,
+      "_type": "request"
     },
     {
-      "_id": "req_get_all_services",
+      "_id": "req_service_get_all",
       "parentId": "fld_service",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/service",
       "name": "Get All Services",
-      "description": "Retrieve all services with optional category filter",
+      "description": "Get all services",
       "method": "GET",
       "body": {},
       "parameters": [
@@ -305,33 +267,37 @@
       ],
       "headers": [],
       "authentication": {},
-      "metaSortKey": -2
+      "metaSortKey": -1705147199000,
+      "_type": "request"
     },
     {
-      "_id": "req_get_service_by_id",
+      "_id": "req_service_get_by_id",
       "parentId": "fld_service",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/service/{{ _.service_id }}",
       "name": "Get Service by ID",
-      "description": "Retrieve service by ID",
+      "description": "Get service by ID",
       "method": "GET",
       "body": {},
       "parameters": [],
       "headers": [],
       "authentication": {},
-      "metaSortKey": -3
+      "metaSortKey": -1705147198000,
+      "_type": "request"
     },
     {
-      "_id": "req_update_service",
+      "_id": "req_service_update",
       "parentId": "fld_service",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/service/{{ _.service_id }}",
       "name": "Update Service",
-      "description": "Update existing service",
+      "description": "Update service",
       "method": "PATCH",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"name\": \"Premium Shoe Cleaning Updated\",\n  \"categoryId\": \"{{ _.category_id }}\",\n  \"price\": 60000,\n  \"description\": \"Updated description\",\n  \"duration\": \"3-4 hours\"\n}"
+        "text": "{\n  \"name\": \"Premium Shoe Cleaning Updated\",\n  \"price\": 60000,\n  \"description\": \"Updated description\",\n  \"duration\": \"3-4 hours\"\n}"
       },
       "parameters": [],
       "headers": [
@@ -342,16 +308,18 @@
       ],
       "authentication": {
         "type": "bearer",
-        "token": "{{ _.bearer_token }}"
+        "token": "{{ _.jwt_token }}"
       },
-      "metaSortKey": -4
+      "metaSortKey": -1705147197000,
+      "_type": "request"
     },
     {
-      "_id": "req_delete_service",
+      "_id": "req_service_delete",
       "parentId": "fld_service",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/service/{{ _.service_id }}",
-      "name": "Delete Service",
+      "name": "Soft Delete Service",
       "description": "Soft delete service",
       "method": "DELETE",
       "body": {},
@@ -359,14 +327,16 @@
       "headers": [],
       "authentication": {
         "type": "bearer",
-        "token": "{{ _.bearer_token }}"
+        "token": "{{ _.jwt_token }}"
       },
-      "metaSortKey": -5
+      "metaSortKey": -1705147196000,
+      "_type": "request"
     },
     {
-      "_id": "req_restore_service",
+      "_id": "req_service_restore",
       "parentId": "fld_service",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/service/{{ _.service_id }}/restore",
       "name": "Restore Service",
       "description": "Restore deleted service",
@@ -376,28 +346,23 @@
       "headers": [],
       "authentication": {
         "type": "bearer",
-        "token": "{{ _.bearer_token }}"
+        "token": "{{ _.jwt_token }}"
       },
-      "metaSortKey": -6
+      "metaSortKey": -1705147195000,
+      "_type": "request"
     },
     {
-      "_id": "fld_order",
-      "parentId": "req_root",
-      "_type": "request_group",
-      "name": "Order",
-      "description": "Order management endpoints"
-    },
-    {
-      "_id": "req_create_order",
+      "_id": "req_order_create",
       "parentId": "fld_order",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/order",
       "name": "Create Order",
       "description": "Create a new order",
       "method": "POST",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"orderGroupId\": \"{{ _.group_id }}\",\n  \"uniqueCode\": \"{{ _.unique_code }}\",\n  \"serviceId\": \"{{ _.service_id }}\",\n  \"status\": \"requested\",\n  \"paymentStatus\": \"unpaid\",\n  \"paymentMethod\": \"cash\",\n  \"pickupDelivery\": true,\n  \"pickupNote\": \"Pickup at lobby\",\n  \"startDate\": \"2025-09-03\",\n  \"endDate\": \"2025-09-05\",\n  \"amount\": 50000,\n  \"serviceNote\": \"Handle with care\"\n}"
+        "text": "{\n  \"uniqueCode\": \"{{ _.unique_code }}\",\n  \"serviceId\": \"{{ _.service_id }}\",\n  \"status\": \"requested\",\n  \"paymentStatus\": \"unpaid\",\n  \"paymentMethod\": \"cash\",\n  \"pickupDelivery\": true,\n  \"pickupNote\": \"Pickup at lobby\",\n  \"startDate\": \"2025-09-03\",\n  \"endDate\": \"2025-09-05\",\n  \"amount\": 50000,\n  \"serviceNote\": \"Handle with care\"\n}"
       },
       "parameters": [],
       "headers": [
@@ -408,86 +373,96 @@
       ],
       "authentication": {
         "type": "bearer",
-        "token": "{{ _.bearer_token }}"
+        "token": "{{ _.jwt_token }}"
       },
-      "metaSortKey": -1
+      "metaSortKey": -1705147200000,
+      "_type": "request"
     },
     {
-      "_id": "req_get_all_orders",
+      "_id": "req_order_get_all",
       "parentId": "fld_order",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/order",
       "name": "Get All Orders",
-      "description": "Retrieve all orders",
+      "description": "Get all orders",
       "method": "GET",
       "body": {},
       "parameters": [],
       "headers": [],
       "authentication": {
         "type": "bearer",
-        "token": "{{ _.bearer_token }}"
+        "token": "{{ _.jwt_token }}"
       },
-      "metaSortKey": -2
+      "metaSortKey": -1705147199000,
+      "_type": "request"
     },
     {
-      "_id": "req_get_order_by_id",
+      "_id": "req_order_get_by_id",
       "parentId": "fld_order",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/order/{{ _.order_id }}",
       "name": "Get Order by ID",
-      "description": "Retrieve order by ID",
+      "description": "Get order by ID",
       "method": "GET",
       "body": {},
       "parameters": [],
       "headers": [],
       "authentication": {
         "type": "bearer",
-        "token": "{{ _.bearer_token }}"
+        "token": "{{ _.jwt_token }}"
       },
-      "metaSortKey": -3
+      "metaSortKey": -1705147198000,
+      "_type": "request"
     },
     {
-      "_id": "req_get_orders_by_group",
+      "_id": "req_order_get_by_group",
       "parentId": "fld_order",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/order/group/{{ _.group_id }}",
       "name": "Get Orders by Group ID",
-      "description": "Retrieve orders by group ID",
+      "description": "Get orders by group ID",
       "method": "GET",
       "body": {},
       "parameters": [],
       "headers": [],
       "authentication": {
         "type": "bearer",
-        "token": "{{ _.bearer_token }}"
+        "token": "{{ _.jwt_token }}"
       },
-      "metaSortKey": -4
+      "metaSortKey": -1705147197500,
+      "_type": "request"
     },
     {
-      "_id": "req_get_my_orders",
+      "_id": "req_order_my_orders",
       "parentId": "fld_order",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/order/my-order/{{ _.group_id }}/unique-code/{{ _.unique_code }}",
-      "name": "Get My Orders (No Auth)",
+      "name": "Get My Orders (Public)",
       "description": "Get my orders by group ID and unique code (no auth required)",
       "method": "GET",
       "body": {},
       "parameters": [],
       "headers": [],
       "authentication": {},
-      "metaSortKey": -5
+      "metaSortKey": -1705147197000,
+      "_type": "request"
     },
     {
-      "_id": "req_update_order",
+      "_id": "req_order_update",
       "parentId": "fld_order",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/order/{{ _.order_id }}",
       "name": "Update Order",
-      "description": "Update existing order",
+      "description": "Update order",
       "method": "PATCH",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"status\": \"inProgress\",\n  \"paymentStatus\": \"paid\",\n  \"paymentMethod\": \"transfer\",\n  \"serviceNote\": \"Updated service note\"\n}"
+        "text": "{\n  \"status\": \"inProgress\",\n  \"paymentStatus\": \"paid\",\n  \"serviceNote\": \"Updated service note\"\n}"
       },
       "parameters": [],
       "headers": [
@@ -498,14 +473,16 @@
       ],
       "authentication": {
         "type": "bearer",
-        "token": "{{ _.bearer_token }}"
+        "token": "{{ _.jwt_token }}"
       },
-      "metaSortKey": -6
+      "metaSortKey": -1705147196000,
+      "_type": "request"
     },
     {
-      "_id": "req_upload_photos",
+      "_id": "req_order_upload_photos",
       "parentId": "fld_order",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/order/{{ _.order_id }}/photos",
       "name": "Upload Photos",
       "description": "Upload photos (before and/or after)",
@@ -514,11 +491,16 @@
         "mimeType": "multipart/form-data",
         "params": [
           {
-            "name": "photos",
-            "value": "",
-            "description": "Photo files",
+            "name": "photoBefore",
             "type": "file",
-            "fileName": ""
+            "fileName": "",
+            "description": "Photo before file"
+          },
+          {
+            "name": "photoAfter",
+            "type": "file",
+            "fileName": "",
+            "description": "Photo after file"
           }
         ]
       },
@@ -526,14 +508,16 @@
       "headers": [],
       "authentication": {
         "type": "bearer",
-        "token": "{{ _.bearer_token }}"
+        "token": "{{ _.jwt_token }}"
       },
-      "metaSortKey": -7
+      "metaSortKey": -1705147195000,
+      "_type": "request"
     },
     {
-      "_id": "req_update_photos",
+      "_id": "req_order_update_photos",
       "parentId": "fld_order",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/order/{{ _.order_id }}/photos",
       "name": "Update Photos",
       "description": "Update photos (before and/or after)",
@@ -542,11 +526,16 @@
         "mimeType": "multipart/form-data",
         "params": [
           {
-            "name": "photos",
-            "value": "",
-            "description": "Photo files",
+            "name": "photoBefore",
             "type": "file",
-            "fileName": ""
+            "fileName": "",
+            "description": "Photo before file"
+          },
+          {
+            "name": "photoAfter",
+            "type": "file",
+            "fileName": "",
+            "description": "Photo after file"
           }
         ]
       },
@@ -554,14 +543,16 @@
       "headers": [],
       "authentication": {
         "type": "bearer",
-        "token": "{{ _.bearer_token }}"
+        "token": "{{ _.jwt_token }}"
       },
-      "metaSortKey": -8
+      "metaSortKey": -1705147194000,
+      "_type": "request"
     },
     {
-      "_id": "req_delete_photos",
+      "_id": "req_order_delete_photos",
       "parentId": "fld_order",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/order/{{ _.order_id }}/photos",
       "name": "Delete Photos",
       "description": "Delete photos (before and/or after)",
@@ -579,16 +570,18 @@
       ],
       "authentication": {
         "type": "bearer",
-        "token": "{{ _.bearer_token }}"
+        "token": "{{ _.jwt_token }}"
       },
-      "metaSortKey": -9
+      "metaSortKey": -1705147193000,
+      "_type": "request"
     },
     {
-      "_id": "req_delete_order",
+      "_id": "req_order_delete",
       "parentId": "fld_order",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/order/{{ _.order_id }}",
-      "name": "Delete Order",
+      "name": "Soft Delete Order",
       "description": "Soft delete order",
       "method": "DELETE",
       "body": {},
@@ -596,14 +589,16 @@
       "headers": [],
       "authentication": {
         "type": "bearer",
-        "token": "{{ _.bearer_token }}"
+        "token": "{{ _.jwt_token }}"
       },
-      "metaSortKey": -10
+      "metaSortKey": -1705147192000,
+      "_type": "request"
     },
     {
-      "_id": "req_restore_order",
+      "_id": "req_order_restore",
       "parentId": "fld_order",
-      "_type": "request",
+      "modified": 1705147200000,
+      "created": 1705147200000,
       "url": "{{ _.base_url }}/order/{{ _.order_id }}/restore",
       "name": "Restore Order",
       "description": "Restore deleted order",
@@ -613,9 +608,316 @@
       "headers": [],
       "authentication": {
         "type": "bearer",
-        "token": "{{ _.bearer_token }}"
+        "token": "{{ _.jwt_token }}"
       },
-      "metaSortKey": -11
+      "metaSortKey": -1705147191000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_instagram_create",
+      "parentId": "fld_instagram",
+      "modified": 1705147200000,
+      "created": 1705147200000,
+      "url": "{{ _.base_url }}/instagram-post",
+      "name": "Create Instagram Post",
+      "description": "Create new Instagram post and publish to Instagram",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"orderId\": \"{{ _.order_id }}\",\n  \"photoAfterUrl\": \"https://lh3.googleusercontent.com/fife/sample-photo-url\",\n  \"caption\": \"Amazing transformation! 🔥 #shoecleaning #neat #transformation\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.jwt_token }}"
+      },
+      "metaSortKey": -1705147200000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_instagram_get_all",
+      "parentId": "fld_instagram",
+      "modified": 1705147200000,
+      "created": 1705147200000,
+      "url": "{{ _.base_url }}/instagram-post",
+      "name": "Get All Instagram Posts",
+      "description": "Get all Instagram posts",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.jwt_token }}"
+      },
+      "metaSortKey": -1705147199000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_instagram_get_by_id",
+      "parentId": "fld_instagram",
+      "modified": 1705147200000,
+      "created": 1705147200000,
+      "url": "{{ _.base_url }}/instagram-post/{{ _.instagram_post_id }}",
+      "name": "Get Instagram Post by ID",
+      "description": "Get Instagram post by ID",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.jwt_token }}"
+      },
+      "metaSortKey": -1705147198000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_instagram_update",
+      "parentId": "fld_instagram",
+      "modified": 1705147200000,
+      "created": 1705147200000,
+      "url": "{{ _.base_url }}/instagram-post/{{ _.instagram_post_id }}",
+      "name": "Update Instagram Post",
+      "description": "Update Instagram post",
+      "method": "PATCH",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"caption\": \"Updated caption with more hashtags! 🔥 #shoecleaning #neat #transformation #premium\",\n  \"isPublish\": true\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.jwt_token }}"
+      },
+      "metaSortKey": -1705147197000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_instagram_takedown",
+      "parentId": "fld_instagram",
+      "modified": 1705147200000,
+      "created": 1705147200000,
+      "url": "{{ _.base_url }}/instagram-post/{{ _.instagram_post_id }}/takedown",
+      "name": "Takedown Instagram Post",
+      "description": "Takedown Instagram post",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"reason\": \"Customer request to remove post\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.jwt_token }}"
+      },
+      "metaSortKey": -1705147196000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_instagram_delete",
+      "parentId": "fld_instagram",
+      "modified": 1705147200000,
+      "created": 1705147200000,
+      "url": "{{ _.base_url }}/instagram-post/{{ _.instagram_post_id }}",
+      "name": "Soft Delete Instagram Post",
+      "description": "Soft delete Instagram post",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.jwt_token }}"
+      },
+      "metaSortKey": -1705147195000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_instagram_restore",
+      "parentId": "fld_instagram",
+      "modified": 1705147200000,
+      "created": 1705147200000,
+      "url": "{{ _.base_url }}/instagram-post/{{ _.instagram_post_id }}/restore",
+      "name": "Restore Instagram Post",
+      "description": "Restore deleted Instagram post",
+      "method": "PATCH",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.jwt_token }}"
+      },
+      "metaSortKey": -1705147194000,
+      "_type": "request"
+    },
+    {
+      "_id": "fld_app",
+      "parentId": "wrk_main",
+      "modified": 1705147200000,
+      "created": 1705147200000,
+      "name": "App",
+      "description": "General app endpoints",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1705147200000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_auth",
+      "parentId": "wrk_main",
+      "modified": 1705147200000,
+      "created": 1705147200000,
+      "name": "Authentication",
+      "description": "Authentication related endpoints",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1705147199000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_category",
+      "parentId": "wrk_main",
+      "modified": 1705147200000,
+      "created": 1705147200000,
+      "name": "Category Service",
+      "description": "Category service management endpoints",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1705147198000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_service",
+      "parentId": "wrk_main",
+      "modified": 1705147200000,
+      "created": 1705147200000,
+      "name": "Service",
+      "description": "Service management endpoints",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1705147197000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_order",
+      "parentId": "wrk_main",
+      "modified": 1705147200000,
+      "created": 1705147200000,
+      "name": "Order",
+      "description": "Order management endpoints",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1705147196000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_instagram",
+      "parentId": "wrk_main",
+      "modified": 1705147200000,
+      "created": 1705147200000,
+      "name": "Instagram Post",
+      "description": "Instagram post management endpoints",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1705147195000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "wrk_main",
+      "parentId": null,
+      "modified": 1705147200000,
+      "created": 1705147200000,
+      "name": "Neat Shoecare API",
+      "description": "Complete API collection for Neat Shoecare backend",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_main",
+      "parentId": "wrk_main",
+      "modified": 1705147200000,
+      "created": 1705147200000,
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:3000",
+        "jwt_token": "",
+        "category_id": "",
+        "service_id": "",
+        "order_id": "",
+        "group_id": "",
+        "unique_code": "",
+        "instagram_post_id": ""
+      },
+      "dataPropertyOrder": {
+        "&": [
+          "base_url",
+          "jwt_token",
+          "category_id",
+          "service_id",
+          "order_id",
+          "group_id",
+          "unique_code",
+          "instagram_post_id"
+        ]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1705147200000,
+      "_type": "environment"
+    },
+    {
+      "_id": "env_dev",
+      "parentId": "env_main",
+      "modified": 1705147200000,
+      "created": 1705147200000,
+      "name": "Development",
+      "data": {
+        "base_url": "http://localhost:3000"
+      },
+      "dataPropertyOrder": {
+        "&": ["base_url"]
+      },
+      "color": "#7ed321",
+      "isPrivate": false,
+      "metaSortKey": 1705147200000,
+      "_type": "environment"
+    },
+    {
+      "_id": "env_prod",
+      "parentId": "env_main",
+      "modified": 1705147200000,
+      "created": 1705147200000,
+      "name": "Production",
+      "data": {
+        "base_url": "http://localhost:3000"
+      },
+      "dataPropertyOrder": {
+        "&": ["base_url"]
+      },
+      "color": "#d0021b",
+      "isPrivate": false,
+      "metaSortKey": 1705147201000,
+      "_type": "environment"
     }
   ]
 }

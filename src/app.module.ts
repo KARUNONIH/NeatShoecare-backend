@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { CategoryServiceModule } from './category-service/category-service.module';
 import { ServiceModule } from './service/service.module';
 import { OrderModule } from './order/order.module';
+import { InstagramPostModule } from './instagram-post/instagram-post.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 
@@ -16,6 +17,7 @@ import { ConfigModule } from '@nestjs/config';
     CategoryServiceModule,
     ServiceModule,
     OrderModule,
+    InstagramPostModule,
   ],
   controllers: [AppController],
   providers: [AppService],
